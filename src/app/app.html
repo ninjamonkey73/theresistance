@@ -1,0 +1,37 @@
+<div class="app-layout">
+  
+  <!-- Header / Navigation -->
+  <header class="app-header">
+    <div class="container header-container">
+      <a routerLink="/" class="logo-area">
+        <svg class="logo-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"/>
+          <path d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"/>
+          <path d="M10 6h4"/>
+          <path d="M10 18h4"/>
+        </svg>
+        <span class="logo-text">THE <span class="accent-text">RESISTANCE</span></span>
+      </a>
+
+      <nav class="nav-links">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">Dashboard</a>
+        <a routerLink="/history" routerLinkActive="active" class="nav-link">History & Insights</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content area -->
+  <main class="app-main">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="container footer-container">
+      <p>&copy; 2026 The Resistance. Powered by Exercise Image Library.</p>
+      <p class="footer-sub">Build Custom Workouts. Log Achievements. Stay Consistent.</p>
+    </div>
+  </footer>
+</div>

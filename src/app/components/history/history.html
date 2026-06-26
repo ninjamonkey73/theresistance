@@ -1,0 +1,130 @@
+<div class="history-container animate-fade-in">
+  
+  <!-- Header -->
+  <div class="history-header">
+    <a routerLink="/dashboard" class="btn btn-secondary btn-back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Dashboard
+    </a>
+    <h1 class="text-gradient">Workout History & Analytics</h1>
+  </div>
+
+  <div class="history-layout">
+    <!-- Left Column: Full Timeline Logs -->
+    <div class="logs-column">
+      <h3 class="column-title">Training Log History</h3>
+
+      @if (logs().length === 0) {
+        <div class="glass-card empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <h3>No workouts logged yet</h3>
+          <p>You haven't recorded any training sessions. Go back to the dashboard, pick a plan, and log your first workout!</p>
+          <a routerLink="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+      } @else {
+        <div class="logs-timeline">
+          @for (log of logs(); track log.id) {
+            <div class="log-entry glass-card glow-hover">
+              <div class="log-entry-header">
+                <div>
+                  <h4 class="log-title">{{ log.workoutName }}</h4>
+                  <span class="log-date">{{ log.timestamp | date: 'EEEE, MMMM d, yyyy @ h:mm a' }}</span>
+                </div>
+                
+                <button (click)="deleteLog(log.id)" class="btn-delete" title="Delete Log Entry">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+              </div>
+
+              @if (log.notes) {
+                <div class="log-notes">
+                  <span class="notes-quote">“</span>
+                  {{ log.notes }}
+                  <span class="notes-quote">”</span>
+                </div>
+              }
+
+              <!-- Logged Exercises Details -->
+              <div class="log-exercises-table">
+                <div class="table-header-row">
+                  <span>Exercise</span>
+                  <span class="text-right">Performed</span>
+                  <span class="text-right">Target</span>
+                </div>
+
+                @for (item of log.items; track item.exerciseId) {
+                  @let ex = getExerciseDetails(item.exerciseId);
+                  @if (ex) {
+                    <div class="table-data-row">
+                      <div class="exercise-name-cell">
+                        <img [src]="ex.imagePath" [alt]="ex.name" class="cell-thumb">
+                        <div>
+                          <span class="cell-name">{{ ex.name }}</span>
+                          <span class="cell-category">{{ ex.category }}</span>
+                        </div>
+                      </div>
+                      <span class="text-right bold-text highlight-mint">
+                        {{ item.completedSets }}s × {{ item.completedReps }}r
+                      </span>
+                      <span class="text-right dim-text">
+                        {{ item.targetSets }}s × {{ item.targetReps }}r
+                      </span>
+                    </div>
+                  }
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Right Column: Analytics & Volume charts -->
+    <div class="analytics-column">
+      <h3 class="column-title">Training Insights</h3>
+
+      <div class="glass-card summary-metrics-card">
+        <h4 class="card-subtitle">Lifetime Volume</h4>
+        
+        <div class="analytics-stats">
+          <div class="stat-box">
+            <span class="stat-num">{{ logs().length }}</span>
+            <span class="stat-lbl">Workouts</span>
+          </div>
+
+          <div class="stat-box">
+            <span class="stat-num">{{ totalSets() }}</span>
+            <span class="stat-lbl">Total Sets</span>
+          </div>
+
+          <div class="stat-box">
+            <span class="stat-num">{{ totalReps() }}</span>
+            <span class="stat-lbl">Est. Reps</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Muscle Category Volume Breakdown -->
+      @if (categoryStats().length > 0) {
+        <div class="glass-card charts-card">
+          <h4 class="card-subtitle">Volume by Muscle Category</h4>
+          <p class="chart-desc">Based on total logged sets per target area.</p>
+
+          <div class="detailed-chart">
+            @for (stat of categoryStats(); track stat.category) {
+              <div class="detailed-chart-item">
+                <div class="item-meta">
+                  <span class="item-label">{{ stat.category }}</span>
+                  <span class="item-value">{{ stat.count }} sets</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-bar" [class]="stat.category.toLowerCase().replace(' ', '-')" [style.width.%]="stat.percentage"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

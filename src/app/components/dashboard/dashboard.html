@@ -1,0 +1,181 @@
+<div class="dashboard-container animate-fade-in">
+  <!-- Header / Intro -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="text-gradient">Gym Dashboard</h1>
+      <p class="subtitle">Welcome to The Resistance. Track your progress, build custom plans, and log your achievements.</p>
+    </div>
+    <a routerLink="/workouts/new" class="btn btn-accent">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+      Build Custom Plan
+    </a>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="metrics-grid">
+    <div class="glass-card metric-card">
+      <div class="metric-icon primary-glow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"/><path d="M6 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"/><path d="M10 6h4"/><path d="M10 18h4"/></svg>
+      </div>
+      <div class="metric-info">
+        <span class="metric-label">Active Plans</span>
+        <span class="metric-value">{{ totalWorkouts() }}</span>
+      </div>
+    </div>
+
+    <div class="glass-card metric-card">
+      <div class="metric-icon secondary-glow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      </div>
+      <div class="metric-info">
+        <span class="metric-label">Sessions Logged</span>
+        <span class="metric-value">{{ totalLogs() }}</span>
+      </div>
+    </div>
+
+    <div class="glass-card metric-card">
+      <div class="metric-icon accent-glow">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="metric-info">
+        <span class="metric-label">Last Active</span>
+        <span class="metric-value">{{ lastActiveDate() ? (lastActiveDate() | date: 'MMM d, yyyy') : 'No logs yet' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Layout -->
+  <div class="dashboard-content-layout">
+    
+    <!-- Left Column: Workout Plans List -->
+    <div class="workouts-section">
+      <h2 class="section-title">Your Workout Plans</h2>
+      
+      @if (workouts().length === 0) {
+        <div class="glass-card empty-state">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+          <h3>No plans found</h3>
+          <p>Create a customized workout plan to structure your workouts and begin logging them.</p>
+          <a routerLink="/workouts/new" class="btn btn-primary">Create Workout Plan</a>
+        </div>
+      } @else {
+        <div class="workouts-grid">
+          @for (workout of workouts(); track workout.id) {
+            <div class="glass-card workout-card glow-hover">
+              <div class="workout-card-header">
+                <div>
+                  <h3 class="workout-name">{{ workout.name }}</h3>
+                  <p class="workout-desc">{{ workout.description || 'No description provided.' }}</p>
+                </div>
+                <div class="workout-actions">
+                  <button (click)="deleteWorkout(workout.id, $event)" class="btn btn-secondary btn-icon" title="Delete Plan">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"/></svg>
+                  </button>
+                  <a [routerLink]="['/workouts/edit', workout.id]" class="btn btn-secondary btn-icon" title="Edit Plan">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Exercise List Preview -->
+              <div class="workout-exercises-list">
+                @for (item of workout.items.slice(0, 3); track item.exerciseId) {
+                  <div class="workout-exercise-preview-item">
+                    <img [src]="getExerciseImage(item.exerciseId)" [alt]="getExerciseName(item.exerciseId)" class="exercise-thumb">
+                    <div class="preview-item-info">
+                      <span class="preview-item-name">{{ getExerciseName(item.exerciseId) }}</span>
+                      <span class="preview-item-rep-details">{{ item.sets }} sets × {{ item.reps }} reps</span>
+                    </div>
+                    <span class="badge" [class]="'badge-' + getExerciseCategory(item.exerciseId).toLowerCase().replace(' ', '-')">
+                      {{ getExerciseCategory(item.exerciseId) }}
+                    </span>
+                  </div>
+                }
+                @if (workout.items.length > 3) {
+                  <div class="more-exercises-badge">
+                    +{{ workout.items.length - 3 }} more exercise{{ workout.items.length - 3 > 1 ? 's' : '' }}
+                  </div>
+                }
+              </div>
+
+              <div class="workout-card-footer">
+                <a [routerLink]="['/workouts/log', workout.id]" class="btn btn-primary w-full">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                  Log Workout Session
+                </a>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Right Column: Recent Activity Logs Timeline -->
+    <div class="activity-section">
+      <h2 class="section-title">Recent Activity Logs</h2>
+
+      @if (logs().length === 0) {
+        <div class="glass-card empty-state mini">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <p>No workouts logged yet. Complete a workout to see it in your timeline!</p>
+        </div>
+      } @else {
+        <!-- Muscle Category Intensity Distribution -->
+        @if (categoryStats().length > 0) {
+          <div class="glass-card category-intensity-card">
+            <h4>Muscle Category Volume (Sets)</h4>
+            <div class="bar-chart">
+              @for (stat of categoryStats(); track stat.category) {
+                <div class="chart-item">
+                  <div class="chart-item-header">
+                    <span class="chart-item-label">{{ stat.category }}</span>
+                    <span class="chart-item-value">{{ stat.count }} sets</span>
+                  </div>
+                  <div class="chart-bar-container">
+                    <div class="chart-bar" [class]="stat.category.toLowerCase().replace(' ', '-')" [style.width.%]="(stat.count / 30) * 100 > 100 ? 100 : (stat.count / 30) * 100"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="timeline">
+          @for (log of logs().slice(0, 5); track log.id) {
+            <div class="timeline-item glass-card">
+              <div class="timeline-dot"></div>
+              <div class="timeline-header">
+                <div>
+                  <h4 class="logged-workout-name">{{ log.workoutName }}</h4>
+                  <span class="logged-time">{{ log.timestamp | date: 'EEEE, MMMM d @ h:mm a' }}</span>
+                </div>
+                <button (click)="deleteLog(log.id)" class="btn-delete-log" title="Delete Log">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 7l-.867 12.142A2 2 0 0 1 16.138 21H7.862a2 2 0 0 1-1.995-1.858L5 7m5 4v6m4-16v4m-8-4h8M10 11v6M14 11v6"/></svg>
+                </button>
+              </div>
+
+              @if (log.notes) {
+                <p class="log-notes">"{{ log.notes }}"</p>
+              }
+
+              <div class="log-exercises-summary">
+                @for (item of log.items; track item.exerciseId) {
+                  <div class="log-exercise-row">
+                    <span class="log-exercise-name">{{ getExerciseName(item.exerciseId) }}</span>
+                    <span class="log-exercise-performance">
+                      {{ item.completedSets }}/{{ item.targetSets }} sets × {{ item.completedReps }} reps
+                      @if (item.completedReps >= item.targetReps && item.completedSets >= item.targetSets) {
+                        <span class="success-indicator">✓</span>
+                      }
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

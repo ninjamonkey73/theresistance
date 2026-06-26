@@ -1,0 +1,130 @@
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header & Navigation */
+.app-header {
+  background: rgba(10, 11, 16, 0.7);
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 16px 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+}
+
+.logo-icon {
+  color: var(--color-accent);
+  filter: drop-shadow(0 0 8px rgba(0, 245, 212, 0.4));
+  animation: pulseLogo 3s infinite alternate;
+}
+
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+.accent-text {
+  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+  color: var(--color-accent);
+  background: rgba(0, 245, 212, 0.08);
+  border: 1px solid rgba(0, 245, 212, 0.15);
+}
+
+/* Main Content Area */
+.app-main {
+  flex-grow: 1;
+  padding: 32px 0;
+}
+
+/* Footer */
+.app-footer {
+  background: #06070a;
+  border-top: 1px solid var(--border-color);
+  padding: 24px 0;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.footer-container p {
+  font-size: 0.88rem;
+}
+
+.footer-sub {
+  font-size: 0.78rem !important;
+  color: rgba(255, 255, 255, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+@keyframes pulseLogo {
+  0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(0, 245, 212, 0.3)); }
+  100% { transform: scale(1.05); filter: drop-shadow(0 0 12px rgba(0, 245, 212, 0.6)); }
+}
+
+@media (max-width: 600px) {
+  .header-container {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .nav-links {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+  }
+  .nav-link {
+    font-size: 0.88rem;
+  }
+}

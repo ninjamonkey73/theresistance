@@ -1,0 +1,339 @@
+.history-container {
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.btn-back {
+  font-size: 0.88rem;
+  padding: 8px 16px;
+}
+
+/* Layout split */
+.history-layout {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .history-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.column-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 20px;
+}
+
+/* Timeline logs */
+.logs-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.log-entry {
+  padding: 24px;
+  border-left: 4px solid var(--color-primary);
+  background: var(--bg-surface);
+}
+
+.log-entry:hover {
+  border-left-color: var(--color-accent);
+}
+
+.log-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.log-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+}
+
+.log-date {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.btn-delete {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete:hover {
+  color: var(--color-danger);
+  background: rgba(255, 0, 85, 0.1);
+}
+
+.log-notes {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: 16px;
+  border-left: 2px solid var(--color-secondary);
+}
+
+.notes-quote {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-secondary);
+}
+
+/* Log Exercises Table */
+.log-exercises-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  background: rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.table-header-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-data-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  padding: 12px 16px;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.table-data-row:last-child {
+  border-bottom: none;
+}
+
+.exercise-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cell-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #141724;
+  flex-shrink: 0;
+}
+
+.cell-name {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell-category {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.text-right {
+  text-align: right;
+}
+
+.bold-text {
+  font-weight: 700;
+}
+
+.highlight-mint {
+  color: var(--color-accent);
+}
+
+.dim-text {
+  color: var(--text-dim);
+}
+
+/* Analytics Sidebar */
+.analytics-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 24px;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.summary-metrics-card {
+  padding: 20px;
+}
+
+.analytics-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.stat-num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+}
+
+.stat-lbl {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Muscle Breakdown charts */
+.charts-card {
+  padding: 20px;
+}
+
+.chart-desc {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: -12px;
+  margin-bottom: 20px;
+}
+
+.detailed-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detailed-chart-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.item-label {
+  color: var(--text-main);
+}
+
+.item-value {
+  color: var(--text-muted);
+}
+
+.progress-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width var(--transition-slow) ease-out;
+}
+
+/* progress track color glows */
+.progress-bar.back {
+  background: linear-gradient(90deg, var(--color-primary), #a78bfa);
+  box-shadow: 0 0 10px rgba(131, 56, 236, 0.5);
+}
+.progress-bar.core {
+  background: linear-gradient(90deg, var(--color-secondary), #60a5fa);
+  box-shadow: 0 0 10px rgba(58, 134, 255, 0.5);
+}
+.progress-bar.lower-body {
+  background: linear-gradient(90deg, var(--color-accent), #2dd4bf);
+  box-shadow: 0 0 10px rgba(0, 245, 212, 0.5);
+}
+.progress-bar.total-body {
+  background: linear-gradient(90deg, var(--color-warning), #f59e0b);
+  box-shadow: 0 0 10px rgba(255, 183, 3, 0.5);
+}
+.progress-bar.upper-body {
+  background: linear-gradient(90deg, var(--color-danger), #fda4af);
+  box-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 32px;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+.empty-state svg {
+  color: var(--text-dim);
+}
+
+.empty-state h3 {
+  color: white;
+  margin-bottom: -8px;
+}

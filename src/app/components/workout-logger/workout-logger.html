@@ -1,0 +1,146 @@
+<div class="logger-container animate-fade-in">
+  
+  <!-- Header -->
+  <div class="logger-header">
+    <a routerLink="/dashboard" class="btn btn-secondary btn-back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Cancel & Back
+    </a>
+    @if (workout()) {
+      <h2 class="text-gradient">Log Workout: {{ workout()?.name }}</h2>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="glass-card error-banner">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (workout()) {
+    <div class="logger-layout">
+      <!-- Left side: Session Config & Notes -->
+      <div class="session-sidebar glass-card">
+        <h3 class="sidebar-title">Session Metadata</h3>
+        
+        <div class="form-group">
+          <label class="form-label" for="log-date">Workout Date</label>
+          <input type="date" id="log-date" class="form-input" [(ngModel)]="logDate">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="log-time">Workout Time</label>
+          <input type="time" id="log-time" class="form-input" [(ngModel)]="logTime">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="log-notes">Session Notes</label>
+          <textarea id="log-notes" class="form-input form-textarea" 
+                    [(ngModel)]="logNotes" placeholder="How did you feel? Energy levels, workout location, etc."></textarea>
+        </div>
+
+        <div class="sidebar-summary">
+          <h4>Summary</h4>
+          <p class="summary-stat">Exercises to Log: <strong>{{ loggedItems().length }}</strong></p>
+          <p class="summary-info">We have filled in the target sets and reps for you. Adjust them only if you did more or less than planned!</p>
+        </div>
+      </div>
+
+      <!-- Right side: Exercises Logger List -->
+      <div class="logger-exercises-column">
+        <h3 class="column-title">Record Exercises</h3>
+        
+        <div class="logger-list">
+          @for (item of loggedItems(); track $index) {
+            @let ex = getExerciseDetails(item.exerciseId);
+            @if (ex) {
+              <div class="log-card glass-card">
+                <img [src]="ex.imagePath" [alt]="ex.name" class="log-card-img">
+                
+                <div class="log-card-content">
+                  <div class="log-card-header">
+                    <span class="log-exercise-title">{{ ex.name }}</span>
+                    <span class="badge" [class]="'badge-' + ex.category.toLowerCase().replace(' ', '-')">
+                      {{ ex.category }}
+                    </span>
+                  </div>
+
+                  <p class="log-target-text">
+                    Target: <strong>{{ item.targetSets }} sets × {{ item.targetReps }} reps</strong>
+                  </p>
+
+                  <div class="log-inputs">
+                    <!-- Completed Sets Counter -->
+                    <div class="log-counter-control">
+                      <span class="control-label">Completed Sets</span>
+                      <div class="control-buttons">
+                        <button type="button" (click)="adjustCompletedSets($index, -1)" class="btn-ctrl">-</button>
+                        <span class="control-value" [class.modified]="item.completedSets !== item.targetSets">
+                          {{ item.completedSets }}
+                        </span>
+                        <button type="button" (click)="adjustCompletedSets($index, 1)" class="btn-ctrl">+</button>
+                      </div>
+                    </div>
+
+                    <!-- Completed Reps Counter -->
+                    <div class="log-counter-control">
+                      <span class="control-label">Completed Reps (per set)</span>
+                      <div class="control-buttons">
+                        <button type="button" (click)="adjustCompletedReps($index, -1)" class="btn-ctrl">-</button>
+                        <span class="control-value" [class.modified]="item.completedReps !== item.targetReps">
+                          {{ item.completedReps }}
+                        </span>
+                        <button type="button" (click)="adjustCompletedReps($index, 1)" class="btn-ctrl">+</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Checkmark indicating done / match target -->
+                <div class="completion-badge" [class.success]="item.completedSets >= item.targetSets && item.completedReps >= item.targetReps">
+                  @if (item.completedSets >= item.targetSets && item.completedReps >= item.targetReps) {
+                    ✓ Target Met
+                  } @else {
+                    Modified
+                  }
+                </div>
+              </div>
+            }
+          }
+        </div>
+
+        <div class="action-footer">
+          <button type="button" (click)="submitLog()" class="btn btn-accent btn-submit">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Complete & Log Workout
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Fullscreen Celebration Modal -->
+  @if (showCelebration()) {
+    <div class="celebration-overlay">
+      <div class="celebration-card glass-card">
+        <div class="celebration-icon">🎉</div>
+        <h2>Workout Logged!</h2>
+        <p>Great job! Your workout has been saved to your timeline. Keep up the resistance!</p>
+        
+        <!-- CSS Confetti Effect -->
+        <div class="confetti-container">
+          <div class="confetti c1"></div>
+          <div class="confetti c2"></div>
+          <div class="confetti c3"></div>
+          <div class="confetti c4"></div>
+          <div class="confetti c5"></div>
+          <div class="confetti c6"></div>
+          <div class="confetti c7"></div>
+          <div class="confetti c8"></div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>
