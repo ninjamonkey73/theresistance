@@ -1,12 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
 import { App } from './app';
+import { AuthService } from './services/auth.service';
 
 describe('App', () => {
+  let mockAuthService: any;
+
   beforeEach(async () => {
+    mockAuthService = {
+      user$: of(null),
+      currentUser: null,
+      loginWithGoogle: () => Promise.resolve({}),
+      logout: () => Promise.resolve(),
+    };
+
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: mockAuthService },
+      ],
     }).compileComponents();
   });
 
