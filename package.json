@@ -5,8 +5,10 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "add-404": "node -e \"require('fs').copyFileSync('dist/theresistance/browser/index.html', 'dist/theresistance/browser/404.html')\""
   },
   "private": true,
   "packageManager": "npm@11.4.2",
